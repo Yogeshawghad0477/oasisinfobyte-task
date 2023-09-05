@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title Page</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+      
+  <title>To-Do App</title><style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+  
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+  
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  
+    .panel {
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+  
+    .panel-heading {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 4px 4px 0 0;
+    }
+  
+    .panel-title {
+      margin: 0;
+      font-size: 18px;
+    }
+  
+    .panel-body {
+      padding: 15px;
+    }
+  
+    .task-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    .task-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      position: relative;
+    }
+  
+    .task-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+  
+    .completed-task {
+      text-decoration: line-through;
+      color: #999;
+    }
+  
+  
+    .delete-button:hover {
+      background-color: #ff0000;
+      /* margin-left: 500px; */
+    }
+    
+    .description {
+      margin-bottom: 10px;
+    }
+  
+    .description textarea {
+      width: 100%;
+      height: 60px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+  
+    .description label {
+    margin-left: 500px;
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+  
+    @media (max-width: 767px) {
+      .container {
+        padding: 10px;
+      }
+    }
+  
+    @media screen and (max-width: 768px) {
+      textarea {
+        width: 100%;
+      }
+    }
+    .task-description {
+        margin-left: 180px;
+      }
+ .edit-button {
+  margin-left: 600px;
+  /* margin-bottom: 10px;
+  margin-top: 10px; */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+}
+
+.task-item {
+  position: relative;
+}
+
+.delete-button {
+  position: absolute;
+  right: 0;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.container button{
+  margin: 10px;
+}
+.container{
+  /* background-color: rgb(104, 98, 98); */
+}
+  </style>
+  
+  
+</head><body>
+  <div class="container">
+    <h1>To-Do App</h1>
+    <input type="text" name="task" id="task-input" placeholder="Add a new task" required>
+    <textarea id="description-input" class="form-control" rows="3" placeholder="Add description"></textarea>
+    <button style="margin-left: 45%;" onclick="addTask()">Add Task</button>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h4 class="panel-title">Pending Tasks <span style="margin-left: 100px;">Description</span></h4>
+      </div>
+      <div class="panel-body">
+        <ul id="pending-tasks" class="task-list"></ul>
+      </div>
+    </div>
+
+    <div class="panel panel-info n">
+      <div class="panel-heading">
+        <h4 class="panel-title">Completed Tasks </small><span style="margin-left: 80px;">Description</span></h4>
+      </div>
+      <div class="panel-body">
+        <ul id="completed-tasks" class="task-list"></ul>
+        <br>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Array to store tasks
+    let tasks = [
+      {
+        text: "Task A",
+        description: "Description A",
+        completed: false,
+        addedAt: new Date()
+      },
+      {
+        text: "Task B",
+        description: "Description B",
+        completed: true,
+        addedAt: new Date()
+      },
+      
+    ];
+
+    // Function to add a new task
+    function addTask() {
+      const taskInput = document.getElementById("task-input");
+      const descriptionInput = document.getElementById("description-input");
+      const taskText = taskInput.value.trim();
+      const descriptionText = descriptionInput.value.trim();
+
+      if (taskText !== "") {
+    const task = {
+      text: taskText,
+      description: descriptionText,
+      completed: false,
+      addedAt: new Date()
+    };
+
+    tasks.push(task);
+    renderTasks();
+
+    taskInput.value = "";
+    descriptionInput.value = "";
+  }
+}
+    // Function to toggle task completion
+    function toggleTaskCompletion(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+
+  
+    function renderTasks() {
+    const pendingTasksContainer = document.getElementById("pending-tasks");
+    const completedTasksContainer = document.getElementById("completed-tasks");
+
+    pendingTasksContainer.innerHTML = "";
+    completedTasksContainer.innerHTML = "";
+
+    tasks.forEach((task, index) => {
+      const taskItem = document.createElement("li");
+      taskItem.className = "task-item";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = task.completed;
+      checkbox.addEventListener("change", () => toggleTaskCompletion(index));
+
+      const taskDescriptionContainer = document.createElement("div");
+      taskDescriptionContainer.className = "task-description-container";
+
+      const taskText = document.createElement("span");
+      taskText.innerText = task.text;
+      if (task.completed) {
+        taskText.classList.add("completed-task");
+      }
+
+      const descriptionText = document.createElement("span");
+      descriptionText.innerText = task.description;
+      descriptionText.classList.add("task-description");
+
+      const editButton = document.createElement("span");
+      editButton.className = "edit-button";
+      editButton.innerHTML = "&#9998;";
+      editButton.addEventListener("click", () => editTask(index));
+
+      const deleteButton = document.createElement("span");
+      deleteButton.className = "delete-button";
+      deleteButton.innerHTML = "&#128465;";
+      deleteButton.addEventListener("click", () => deleteTask(index));
+
+      taskDescriptionContainer.appendChild(taskText);
+      taskDescriptionContainer.appendChild(descriptionText);
+
+      taskItem.appendChild(checkbox);
+      taskItem.appendChild(taskDescriptionContainer);
+      taskItem.appendChild(editButton);
+      taskItem.appendChild(deleteButton);
+
+      if (task.completed) {
+        completedTasksContainer.appendChild(taskItem);
+      } else {
+        pendingTasksContainer.appendChild(taskItem);
+      }
+    });
+  }
+    function editTask(index) {
+        const taskText = tasks[index].text;
+        const descriptionText = tasks[index].description;
+        
+        const updatedTaskText = prompt("Edit Task", taskText);
+        const updatedDescriptionText = prompt("Edit Description", descriptionText);
+        
+        if (updatedTaskText !== null && updatedTaskText.trim() !== "") {
+          tasks[index].text = updatedTaskText.trim();
+          tasks[index].description = updatedDescriptionText.trim();
+          renderTasks();
+        }
+      }
+
+      function deleteTask(index) {
+        tasks.splice(index, 1);
+        renderTasks();
+      }
+
+      renderTasks();
+  </script>
+</body>
+
+
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </body>
+</html>
