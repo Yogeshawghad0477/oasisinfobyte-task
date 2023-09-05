@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+
+    .calculator {
+      max-width: 300px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 18px;
+      text-align: right;
+      border: none;
+      background-color: #f9f9f9;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .key {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .key:hover {
+      background-color: #0056b3;
+    }
+
+    .key.equal {
+      grid-column: span 2;
+    }
+  
+    .key.clear {
+      background-color: #dc3545;
+    }
+
+    .key.clear:hover {
+      background-color: #bb2d3b;
+    }
+    .key.addition {
+      height: 100px;
+    }
+    .calculator {
+  width: 400px;
+  height: 560px;
+  /* Additional styling properties */
+}
+  </style>
+</head>
+<body>
+  <div class="calculator" id="calculator">
+    <input type="text" id="result" placeholder="0" readonly>
+    <div class="keypad" id="keypad" style="margin-top: 50px;">
+      <button class="key clear"onclick="clearResult()">C</button>
+      <button class="key"  onclick="deleteLastDigit()">CE</button>
+      <button class="key"  onclick="appendSymbol('/')">÷</button>
+      <button class="key"  onclick="calculate()">=</button>
+      <button class="key"  onclick="appendSymbol('(')">(</button>
+      <button class="key" onclick="appendSymbol(')')">)</button>      
+      <button class="key" onclick="appendSymbol('^')">^</button>
+      <button class="key" onclick="appendSymbol('*')">x</button>
+      <button class="key" onclick="appendNumber(7)">7</button>
+      <button class="key" onclick="appendNumber(8)">8</button>
+      <button class="key" onclick="appendNumber(9)">9</button>
+      <button class="key" onclick="appendSymbol('-')">-</button>
+      <button class="key" onclick="appendNumber(4)">4</button>
+      <button class="key" onclick="appendNumber(5)">5</button>
+      <button class="key" onclick="appendNumber(6)">6</button>
+      <button class="key" onclick="appendSymbol('+')">+</button>
+      <button class="key" onclick="appendNumber(1)">1</button>
+      <button class="key" onclick="appendNumber(2)">2</button>
+      <button class="key" onclick="appendNumber(3)">3</button>
+      <button class="key" onclick="appendSymbol('%')">%</button>
+      <button class="key zero" onclick="appendNumber(0)">0</button>
+      <button class="key" onclick="appendSymbol('.')">.</button>
+      <button class="key equal" onclick="calculate()">Enter</button>
+      <button class="key"  onclick="changeBackgroundColor()"><small><small><small><small>Baground Color</small></small></small> </button>
+      <button class="key" onclick="Key_color()"><small><small>Key Color</small></small></small> </button>
+      <!-- <button class="key"  onclick="changeBackgroundColor()"><small><small>text Color</small></small></small> </button> -->
+      <button  class="key" onclick="changeButtonTextColor()"><small><small><small> Text Color</button>
+      <button class="key"  onclick="reloadPage()"><small><small>Default Color</small></small></small> </button>
+  
+    </div>
+  </div>
+  <script>
+    function clearResult() {
+      document.getElementById("result").value = "";
+    }
+
+    function deleteLastDigit() {
+      var result = document.getElementById("result").value;
+      document.getElementById("result").value = result.slice(0, -1);
+    }
+
+    function appendNumber(number) {
+      var result = document.getElementById("result").value;
+      document.getElementById("result").value = result + number;
+    }
+    function appendSymbol(symbol) {
+  var result = document.getElementById("result").value;
+  var lastChar = result.slice(-1);
+
+  if (
+    lastChar !== "+" &&
+    lastChar !== "-" &&
+    lastChar !== "*" &&
+    lastChar !== "/" &&
+    lastChar !== "(" &&
+    lastChar !== ")"
+  ) {
+    document.getElementById("result").value = result + symbol;
+  }
+}
+
+    function calculate() {
+      var result = document.getElementById("result").value;
+      try {
+        // Replacing ^ with Math.pow() for exponentiation
+        result = result.replace(/\^/g, "**");
+        // Calculating the result using eval() function
+        var calculation = eval(result);
+        document.getElementById("result").value = calculation;
+      } catch (error) {
+        document.getElementById("result").value = "Error";
+      }
+    }
+
+    // Additional functions for parentheses
+    function appendOpeningParenthesis() {
+      var result = document.getElementById("result").value;
+      if (result === "") {
+        document.getElementById("result").value = "(";
+      } else {
+        var lastChar = result.slice(-1);
+        if (
+          lastChar === "+" ||
+          lastChar === "-" ||
+          lastChar === "*" ||
+          lastChar === "/"
+        ) {
+          document.getElementById("result").value = result + "(";
+        }
+      }
+    }
+
+    function appendClosingParenthesis() {
+      var result = document.getElementById("result").value;
+      if (result !== "") {
+        var openingParenthesesCount = (result.match(/\(/g) || []).length;
+        var closingParenthesesCount = (result.match(/\)/g) || []).length;
+        if (openingParenthesesCount > closingParenthesesCount) {
+          document.getElementById("result").value = result + ")";
+        }
+      }
+    }
+    
+  </script>
+  <script>
+    // Function to change background color of the calculator
+    function changeBackgroundColor() {
+      var calculator = document.getElementById("calculator");
+      var colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff","black","white","cyan"];
+      var randomColor = colors[Math.floor(Math.random() * colors.length)];
+      calculator.style.backgroundColor = randomColor;
+    }
+    function Key_color() {
+      var calculator = document.getElementById("keypad");
+      var colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff","black","white","cyan"];
+      var randomColor = colors[Math.floor(Math.random() * colors.length)];
+      calculator.style.backgroundColor = randomColor;
+    }
+      // Function to change the background color of the key when pressed
+      function changeKeyColor(button) {
+      var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      button.style.backgroundColor = randomColor;
+    }
+  // Add event listeners to key buttons
+  var keyButtons = document.getElementsByClassName("key");
+  for (var i = 0; i < keyButtons.length; i++) {
+    keyButtons[i].addEventListener("click", function(event) {
+      changeKeyColor(event.target);
+    });
+  }
+  function reloadPage() {
+      location.reload();
+    }
+    // Function to change the text color of the calculator buttons when pressed
+   
+    
+   // Function to change the text color of all calculator buttons to the same random color
+function changeButtonTextColor() {
+  var buttons = document.getElementsByClassName("key");
+  var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].style.color = randomColor;
+  }
+}
+
+  </script>
+</body>
+</html>
+
